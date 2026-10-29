@@ -92,3 +92,28 @@ Look at Pareto front results. Objectives: minimize refusals, minimize KL diverge
 - [Heretic repo](https://github.com/p-e-w/heretic)
 - [Abliteration paper (Arditi et al. 2024)](https://arxiv.org/abs/2406.11717)
 - [Model card example](https://huggingface.co/saidutta69/LFM2.5-230M-heretic)
+
+## Seeds and search strategy
+
+### What is `--seed`?
+The `--seed` parameter seeds all randomness (Python, NumPy, PyTorch, Optuna's TPE sampler). It controls:
+- **Startup exploration**: Which random parameter combinations are tried in `--n-startup-trials` (default 30)
+- **Guided search path**: How TPE proposes subsequent trials based on those starting points
+- **Reproducibility**: Same seed + same model + same config = reproducible results
+
+### Impact on results
+- **Path selection**: Different seeds explore completely different regions of the parameter space. A good seed can find the "knee" of the Pareto curve quickly; a bad seed can miss it.
+- **More trials vs better seed**: More trials help *along* a chosen path, but trying multiple seeds often beats doubling trials. For tight constraints (e.g., "<10 refusals with minimal KL"), running 2-3 seeds with ~50-100 trials each is often more effective than 1 seed with 300 trials.
+- **Diminishing returns**: For models <1B, biggest gains come in first 50-150 trials per seed; going beyond often gives smaller improvements.
+
+### Recommendations
+```bash
+# Try multiple seeds
+heretic <model> --seed 42 --n-trials 150
+heretic <model> --seed 12345 --n-trials 150
+heretic <model> --seed 777 --n-trials 150
+```
+
+- **Keep checkpoints**: Use `--study-checkpoint-dir`. If resuming/extending, keep the same seed and directory. Start fresh directory + new seed for a different search path.
+- **Optimize for the knee**: Don't chase 0/100 refusals at all costs - often the best real-world trade-off is just under 10 refusals with minimal KL. Always look at the Pareto front.
+- **Compare across seeds**: Evaluate all trials from all seeds together to find the true best trade-off for your goal.
