@@ -23,7 +23,7 @@ def parse_checkpoints(checkpoint_dirs):
                                     elif s['name'] == 'KL divergence':
                                         kl = s['score']['value']
                                 if tid not in trials or (kl is not None and kl < trials[tid].get('kl', float('inf'))):
-                                    trials[tid] = {'kl': kl, 'refusals': refusals}
+                                    trials.setdefault(tid, {}).update({'kl': kl, 'refusals': refusals})
                             elif data.get('op_code') == 8 and 'user_attr' in data and 'parameters' in data['user_attr']:
                                 tid = data['trial_id']
                                 if tid not in trials:

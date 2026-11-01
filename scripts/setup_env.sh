@@ -20,6 +20,6 @@ echo "Installing dependencies..."
 pip install -U "transformers[torch]" peft huggingface-hub datasets accelerate bitsandbytes safetensors sentencepiece protobuf
 
 echo "Installing Heretic..."
-pip install -U "git+https://github.com/p-e-w/heretic.git"
+pip install -U heretic-llm
 
 echo "Done! Activate with: source $VENV_DIR/bin/activate"
