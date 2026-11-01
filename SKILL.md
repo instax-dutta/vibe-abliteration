@@ -31,7 +31,7 @@ pip install -U torch torchvision --index-url https://download.pytorch.org/whl/cu
 
 # Install dependencies and heretic
 pip install -U "transformers[torch]" peft huggingface-hub datasets accelerate bitsandbytes safetensors sentencepiece protobuf
-pip install -U "git+https://github.com/p-e-w/heretic.git"
+pip install -U heretic-llm
 ```
 
 Notes:
