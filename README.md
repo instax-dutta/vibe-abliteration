@@ -7,7 +7,7 @@ A robust, agent-friendly skill for automating model censorship removal (ablitera
 - **Environment setup** - Installs correct dependencies for your GPU/CUDA
 - **Automated optimization** - Runs Heretic's Optuna-based search to find best ablation parameters
 - **Smart evaluation** - Balances refusal suppression vs KL drift from original model
-- **Handles non-interactive runs** - Workarounds for TTY issues in CI/remote environments
+- **Handles headless runs** - Set the post-optimization flags to save and upload without a TTY
 - **Model export & documentation** - Saves models with proper Heretic-style model cards
 - **Checkpoint management** - Resume interrupted runs
 
@@ -57,7 +57,7 @@ Or use the skill directly with the included scripts.
 
 From extensive testing on LFM2.5-230M (450+ trials):
 - Heretic v2.0 can find good trade-offs; sometimes better than v1.4.0
-- Post-optimization interactive prompt can break in non-TTY environments ([issue #535](https://github.com/p-e-w/heretic/issues/535))
+- Headless save and upload need every post-optimization flag set (`--trial-index`, `--model-action`, `--export-strategy`, and the save or upload flags). If one is missing, Heretic prompts and fails without a TTY.
 - Small models can have tight trade-off spaces between KL and refusals
 - More trials (150-200) often find better Pareto-optimal solutions
 
