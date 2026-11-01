@@ -10,6 +10,7 @@ A robust, agent-friendly skill for automating model censorship removal (ablitera
 - **Handles headless runs** - Set the post-optimization flags to save and upload without a TTY
 - **Model export & documentation** - Saves models with proper Heretic-style model cards
 - **Checkpoint management** - Resume interrupted runs
+- **Already-published models** - Optional: [Heretic Directory](https://hdir.sdad.pro) lists existing Heretic conversions ranked by KL and refusals, so you can skip a run when a good one already exists
 
 ## Quick Start
 
@@ -31,7 +32,13 @@ Tell your agent: *"Abliterate LiquidAI/LFM2.5-230M with Heretic, minimize KL whi
 
 Everything runs through Heretic's own CLI; the skill just sequences it. Install with `pip install -U heretic-llm`, then run `heretic <model-id>`.
 
-`scripts/evaluate_trials.py [checkpoint-dirs...]` inspects Heretic checkpoint `.jsonl` files offline and prints the best trials by KL and by refusals, with their ablation parameters. Everything else runs through Heretic's own CLI.
+`scripts/evaluate_trials.py [checkpoint-dirs...]` inspects Heretic checkpoint `.jsonl` files offline and prints the best trials by KL and by refusals with their ablation parameters, plus the exact `--trial-index` to pass back to Heretic. Add `--json` for machine-readable output. Everything else runs through Heretic's own CLI.
+
+## References
+
+- [Heretic](https://github.com/p-e-w/heretic) - the abliteration tool this skill drives
+- [Heretic Directory](https://hdir.sdad.pro) - published Heretic models, ranked by KL divergence and refusal rate
+- [Abliteration paper (Arditi et al. 2024)](https://arxiv.org/abs/2406.11717)
 
 ## Related Skills
 

@@ -12,6 +12,24 @@ Automate directional ablation with [Heretic](https://github.com/p-e-w/heretic) t
 - Need to find optimal ablation parameters balancing refusals vs KL divergence
 - Want to reproduce or improve abliteration results
 
+## Before you start: is it already published?
+
+Optional shortcut, not a required step. If the user only needs a working
+decensored model (not a specific parameter set or a fresh run), check
+[Heretic Directory](https://hdir.sdad.pro) first — it indexes published
+Heretic conversions and GGUF/MLX/AWQ quants, ranked by KL divergence and
+refusal rate.
+
+- Search the **original** model name (`Qwen3-4B`), not the uncensored one.
+- Model page pattern: `https://hdir.sdad.pro/models/<org>/<name>/`
+  (e.g. <https://hdir.sdad.pro/models/qwen/qwen3-4b/>) lists each
+  conversion with its repo, formats, KL, refusals and downloads.
+- Numbers there are publisher-reported and not re-measured; prefer rows
+  with published metrics over inherited ones.
+- If a conversion fits, hand the repo id to the user and stop. Run Heretic
+  when no conversion exists, when the user wants better numbers, or when
+  they want to control the trade-off themselves.
+
 ## Prerequisites
 - GPU with sufficient VRAM (varies by model size; 4-8GB minimum for small models)
 - Python 3.10+, PyTorch installed appropriately
@@ -75,9 +93,17 @@ heretic <model-id> --trial-index 0 --model-action save --save-directory ./out --
 If a setting is left unset, Heretic prompts for it. With no TTY, that prompt raises `EOFError`, which is the expected result of a missing flag, not a bug to work around.
 
 ### 5) Evaluate and choose best trial
-Look at Pareto front results. Objectives: minimize refusals, minimize KL divergence from baseline.
-- Check trial results in logs/checkpoints (`checkpoints/*.jsonl`)
-- For trade-off goals, parse and select best by your criteria
+Objectives: minimize refusals, minimize KL divergence from baseline. Look at the Pareto front, not a single winner.
+
+Summarize the journal without reloading the model:
+```bash
+python3 scripts/evaluate_trials.py checkpoints --json   # or omit --json for a table
+```
+It prints both trial numbers because they differ:
+- `index` is Heretic's `[Trial N]` label.
+- `trial_index` is the position in the sorted Pareto front, which is the number `--trial-index` expects.
+
+Pass the `trial_index` of the point you want. A trial that is not on the Pareto front has no `trial_index` and cannot be selected headlessly.
 
 ### 6) Save and document
 - Save model with `--model-action save --save-directory <path>` or interactively
