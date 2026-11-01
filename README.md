@@ -29,15 +29,7 @@ cp -r vibe-abliteration ~/.kilocode/skills/
 
 Tell your agent: *"Abliterate LiquidAI/LFM2.5-230M with Heretic, minimize KL while getting refusals under 10/100"*
 
-Or use the skill directly with the included scripts.
-
-## Scripts
-
-- `scripts/setup_env.sh` - Create venv and install dependencies
-- `scripts/run_abliteration.sh` - Run optimization with sensible defaults
-- `scripts/evaluate_trials.py` - Parse checkpoints and find best trials
-- `scripts/save_model.sh` - Save best trial non-interactively
-- `scripts/make_model_card.py` - Generate Heretic-style README/model card
+Everything runs through Heretic's own CLI; the skill just sequences it. Install with `pip install -U heretic-llm`, then run `heretic <model-id>`.
 
 ## Related Skills
 
