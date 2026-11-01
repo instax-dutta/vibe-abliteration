@@ -31,6 +31,8 @@ Tell your agent: *"Abliterate LiquidAI/LFM2.5-230M with Heretic, minimize KL whi
 
 Everything runs through Heretic's own CLI; the skill just sequences it. Install with `pip install -U heretic-llm`, then run `heretic <model-id>`.
 
+`scripts/evaluate_trials.py [checkpoint-dirs...]` inspects Heretic checkpoint `.jsonl` files offline and prints the best trials by KL and by refusals, with their ablation parameters. Everything else runs through Heretic's own CLI.
+
 ## Related Skills
 
 - [finetune-llm](https://github.com/instax-dutta/finetune-llm) - Hardware-aware LLM fine-tuning
