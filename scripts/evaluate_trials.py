@@ -29,20 +29,40 @@ def parse_checkpoints(checkpoint_dirs):
                                 if tid not in trials:
                                     trials[tid] = {}
                                 trials[tid]['params'] = data['user_attr']['parameters']
-                        except:
+                        except Exception:
                             pass
-            except:
+            except Exception:
                 pass
     return trials
+
+def best_by(trials, key):
+    ranked = [t for t in trials.items() if t[1].get(key) is not None]
+    if not ranked:
+        return None
+    return min(ranked, key=lambda t: t[1][key])
 
 if __name__ == '__main__':
     dirs = sys.argv[1:] or ['checkpoints', 'heretic-runs/checkpoints']
     trials = parse_checkpoints(dirs)
-    results = []
-    for tid, t in trials.items():
-        if t.get('kl') is not None and t.get('refusals') is not None:
-            results.append((tid, t['kl'], t['refusals'], t.get('params')))
-    results.sort(key=lambda x: x[1])  # sort by KL
-    print("Trial\tKL\tRefusals\tParams")
-    for r in results[:30]:
-        print(f"{r[0]}\t{r[1]:.6f}\t{r[2]*100 if r[2] <= 1 else r[2]}\t{r[3]}")
+    if not trials:
+        print("No trials found in:", dirs)
+        sys.exit(1)
+
+    print(f"Parsed {len(trials)} trials\n")
+    print("Top 5 by KL divergence:")
+    for tid, d in sorted(trials.items(), key=lambda t: t[1].get('kl', float('inf')))[:5]:
+        print(f"  trial {tid}: KL={d.get('kl')} refusals={d.get('refusals')}")
+    print("\nTop 5 by refusals:")
+    for tid, d in sorted(trials.items(), key=lambda t: t[1].get('refusals', float('inf')))[:5]:
+        print(f"  trial {tid}: refusals={d.get('refusals')} KL={d.get('kl')}")
+
+    bk = best_by(trials, 'kl')
+    br = best_by(trials, 'refusals')
+    if bk:
+        print(f"\nBest by KL: trial {bk[0]}  KL={bk[1].get('kl')} refusals={bk[1].get('refusals')}")
+        if 'params' in bk[1]:
+            print("  params:", json.dumps(bk[1]['params']))
+    if br:
+        print(f"Best by refusals: trial {br[0]}  refusals={br[1].get('refusals')} KL={br[1].get('kl')}")
+        if 'params' in br[1]:
+            print("  params:", json.dumps(br[1]['params']))
