@@ -10,6 +10,7 @@ A robust, agent-friendly skill for automating model censorship removal (ablitera
 - **Handles headless runs** - Set the post-optimization flags to save and upload without a TTY
 - **Model export & documentation** - Saves models with proper Heretic-style model cards
 - **Checkpoint management** - Resume interrupted runs
+- **Reasoning layer** - Explains what a trial actually optimizes (attention vs MLP weights, direction scope, layer profile), when to swap KL for a benchmark, how to size a trial budget, and when to stop
 - **Already-published models** - Optional: [Heretic Directory](https://hdir.sdad.pro) lists existing Heretic conversions ranked by KL and refusals, so you can skip a run when a good one already exists
 
 ## Quick Start
@@ -33,6 +34,10 @@ Tell your agent: *"Abliterate LiquidAI/LFM2.5-230M with Heretic, minimize KL whi
 Everything runs through Heretic's own CLI; the skill just sequences it. Install with `pip install -U heretic-llm`, then run `heretic <model-id>`.
 
 `scripts/evaluate_trials.py [checkpoint-dirs...]` inspects Heretic checkpoint `.jsonl` files offline and prints the best trials by KL and by refusals with their ablation parameters, plus the exact `--trial-index` to pass back to Heretic. Add `--json` for machine-readable output. Everything else runs through Heretic's own CLI.
+
+## Model support
+
+Heretic supports most dense models, many multimodal models, several MoE architectures, and many modern hybrids. Anything without a transformer-style layer stack, or whose attention/MLP output projection is named differently, is not supported; SKILL.md lists the exact module names it accepts and the two failure signatures.
 
 ## References
 
