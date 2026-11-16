@@ -7,8 +7,9 @@ A robust, agent-friendly skill for automating model censorship removal (ablitera
 - **Environment setup** - Installs correct dependencies for your GPU/CUDA
 - **Automated optimization** - Runs Heretic's Optuna-based search to find best ablation parameters
 - **Smart evaluation** - Balances refusal suppression vs KL drift from original model
-- **Handles headless runs** - Set the post-optimization flags to save and upload without a TTY
+- **Handles headless runs** - Set the post-optimization flags to save without a TTY
 - **Model export & documentation** - Saves models with proper Heretic-style model cards
+- **Publish gate** - Saves locally by default; uploads only after you authorise the exact artifact, its repository and visibility, and the base model's license permits redistribution
 - **Checkpoint management** - Resume interrupted runs
 - **Reasoning layer** - Explains what a trial actually optimizes (attention vs MLP weights, direction scope, layer profile), when to swap KL for a benchmark, how to size a trial budget, and when to stop
 - **Already-published models** - Optional: [Heretic Directory](https://hdir.sdad.pro) lists existing Heretic conversions ranked by KL and refusals, so you can skip a run when a good one already exists

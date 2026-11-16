@@ -116,6 +116,8 @@ Example headless save:
 heretic <model-id> --trial-index 0 --model-action save --save-directory ./out --export-strategy merge
 ```
 
+Default to `save`. Do not add `--model-action upload` or `--upload-repo-id` until the user has authorised publishing that artifact to a named repository and visibility, and the base model's license has been read and permits redistribution.
+
 If a setting is left unset, Heretic prompts for it. With no TTY, that prompt raises `EOFError`, which is the expected result of a missing flag, not a bug to work around.
 
 ### 5) Evaluate and choose best trial
@@ -144,7 +146,10 @@ Then:
 - Save model with `--model-action save --save-directory <path>` or interactively
 - Create model card following Heretic conventions (see example model cards)
 - Include: base model, heretic version, parameters/trial info, KL divergence, refusal scores, ablation parameters
+- **Save locally by default.** Upload only after the user explicitly authorizes publishing that exact artifact, naming the repository and the visibility (public or private). Read the base model's license first: publish only if its terms permit redistribution of a modified derivative, and state that license in the model card
 - If uploading, use appropriate tags (`uncensored`, `decensored`, `abliterated`)
+
+Publishing is the step that cannot be undone. A local save is reversible; a public repo is not.
 
 ## Reasoning layer
 
